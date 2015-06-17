@@ -1,0 +1,1 @@
+rsync -avz /home/jr/NetBeansProjects/rha/app/ pi@rumation2:/home/pi/node-red-dashboard/ha/app/
