@@ -12,11 +12,12 @@
   <link rel="stylesheet" href="app.css">
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
   <script src="app.js"></script>
   <script src="controllers.js"></script>
 </head>
 
-<body ng-app="rahApp" ng-controller="camController">
+<body ng-app="rahApp">
 <div class="container-fluid">
 <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -27,17 +28,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"> RHA</a>
+            <a class="navbar-brand" href="#/dashboard"> RHA</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Kamera <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">obyvak</a></li>
-                  <li><a href="#">detsky pokoj</a></li>
-                </ul>
-              </li>
+	      <li><a href="#/cameras"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> Cams</a></li>
+	      <li><a href="#/pirs"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> PIR sensors</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="./">Default <span class="sr-only">(current)</span></a></li>
@@ -45,49 +41,7 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
 </nav>
-    <div class="row">
-        <div class="col-md-6">
-            <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened" datepicker-options="dateOptions" ng-model="dt" ng-change="numfilesChanged()" ng-required="true" close-text="Close" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </p>
-        </div>
-	
-	<div class="col-md-6">
-	    <div class="input-group">
-		<span class="input-group-btn">
-		    <button class="btn btn-success" ng-click="numFilesSet(-1)" type="button">-</button>
-		</span>
-		<input class="form-control text-center" type="number" placeholder="pocet obrazku" ng-model="numfiles" ng-change="numfilesChanged()" name="numfiles"/>
-		<span class="input-group-btn">
-		    <button class="btn btn-success" ng-click="numFilesSet(1)" type="button">+</button>
-		</span>
-	    </div><!-- /input-group -->
-	</div>
-    </div>
-    
-    <div class="row">
-	<div ng-repeat="file in files" class="col-md-4 col-sm-6">
-	    <div class="panel panel-primary container-fluid">
-		<div class="panel-heading">
-		    <h3 class="panel-title">{{file}}</h3>
-		</div>
-		
-		<div class="panel-body">
-		    <div class="row">
-			<div class="col-xs-12 text-center">
-			    <a href="{{timelapseDir}}{{file}}">
-				<img class="img-responsive img-thumbnail" ng-src="{{timelapseDir}}thumbs/{{file}}" alt="{{timelapseDir}}thumbs/{{file}}">
-			    </a>
-			</div>
-		    </div>
-		</div>
-	    </div>
-	</div>
-    </div>
-
+<div ng-view></div>    
 </div>
 </body>
 </html>

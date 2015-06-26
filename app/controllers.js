@@ -2,6 +2,25 @@
 
 var rahApp = angular.module('rahApp');
 
+rahApp.controller('rahController',function($scope){
+    $scope.appName = 'rah';
+});
+
+rahApp.controller('pirController',function($scope,$http,$interval){
+    function getPirLogs(pirname,limit,date){
+	    $http.get('/rest/getpirslog?limit='+limit).success(function(data){
+	    $scope.logdata = data;
+	    });
+    }
+
+    $scope.limit=25;
+    $scope.dt = new Date();
+    var dt = $scope.dt;
+    getPirLogs('jmeno pirka',$scope.limit,dt);
+    
+    $interval(function(){$scope.dt=new Date();},500);
+});
+
 rahApp.controller('camController',function($scope,$http){
 
     $scope.cams = [
@@ -53,12 +72,6 @@ rahApp.controller('camController',function($scope,$http){
     
     getCamFiles($scope.camName,$scope.numfiles,$scope.dt);
     
-//    $http.get('/rest/getcamnames?cam=rumation2&numfiles='+$scope.numfiles).success(function(data){
-//	$scope.restdata = data;
-//	$scope.timelapseDir = '../../img/runnas_public'+data.camfolder+'/';
-//	$scope.files = data.files;
-//    });
-    
     $scope.numFilesSet = function(val){
 	$scope.numfiles+=val;
 	if($scope.numfiles<0) $scope.numfiles=0;
@@ -67,10 +80,5 @@ rahApp.controller('camController',function($scope,$http){
     
     $scope.numfilesChanged = function(){
 	getCamFiles($scope.camName,$scope.numfiles,$scope.dt);
-//	$http.get('/rest/getcamnames?cam=rumation2&numfiles='+$scope.numfiles).success(function(data){
-//	$scope.restdata = data;
-//	$scope.timelapseDir = '../../img/runnas_public'+data.camfolder+'/';
-//	$scope.files = data.files;
-//	});
     }
 });

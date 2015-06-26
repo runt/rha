@@ -34,3 +34,7 @@
   content: "";
   padding: 0;
 }
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #E6FFF5;
+}

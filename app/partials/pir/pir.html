@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-3">
+	<div class="panel panel-primary container-fluid">
+	    <div class="panel-heading">
+		<h3 class="panel-title">Pirs - Status</h3>
+	    </div>
+	    <div class="panel-body">
+		body
+	    </div>
+	</div>
+    </div>
+    <div class="col-md-9">
+	<div class="panel panel-primary container-fluid">
+	    <div class="panel-heading">
+		<h3 class="panel-title">Pirs - Log / {{dt|date:'dd.MM.yyyy HH:mm:ss'}} - {{limit}}</h3>
+	    </div>
+	    <div class="panel-body">
+		<table class="table table-condensed table-striped table-responsive table-hover">
+		    <thead>
+			<tr>
+			    <th>stamp</th>
+			    <th>pir</th>
+			</tr>
+		    </thead>
+		    <tbody>
+			<tr ng-repeat="log in logdata">
+			    <td>{{log.stamp|date:'dd.MM.yyyy HH:mm:ss'}}</td>
+			    <td>{{log.text}}</td>
+			</tr>
+		    </tbody>
+		</table>
+	    </div>
+	</div>
+    </div>
+</div>
