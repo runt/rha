@@ -1,4 +1,7 @@
 /* app css stylesheet */
+canvas{
+    vertical-align: middle;
+}
 .img-thumbnail{
     width: 100%;
 }

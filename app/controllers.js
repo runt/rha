@@ -6,20 +6,67 @@ rahApp.controller('rahController',function($scope){
     $scope.appName = 'rah';
 });
 
+// PIR controller --------------------------------------------------------------
 rahApp.controller('pirController',function($scope,$http,$interval){
+    var led1;
+    var sock;
     function getPirLogs(pirname,limit,date){
 	    $http.get('/rest/getpirslog?limit='+limit).success(function(data){
 	    $scope.logdata = data;
 	    });
     }
 
-    $scope.limit=25;
+    function init(){
+        led1 = new steelseries.Led('canvasLed1', {
+                            width: 50,
+                            height: 50
+                            });
+        led1.setLedColor(steelseries.LedColor.GREEN_LED);
+        led1.setLedOnOff(false);
+        
+        sock = new WebSocket('ws://'+window.location.host+'/ws/pir');
+        sock.onopen = function(){ 
+		    console.log("Connected websocket");
+		    console.log("Sending ping..");
+                    sock.send("Ping!");
+		    console.log("Ping sent..");
+		  };
+        sock.onerror = function(){ console.log("Websocket error"); };
+        sock.onmessage = function(evt){
+            //var pirData = JSON.parse(evt.data);
+            console.log(evt.data);
+            $scope.pirdata=evt.data;
+            if(evt.data=="1"){
+                $scope.alertTyp="alert-danger";
+                led1.setLedColor(steelseries.LedColor.RED_LED);
+                led1.setLedOnOff(true);
+                getPirLogs('jmeno pirka',$scope.limit,$scope.dt);
+            }
+            else{
+                $scope.alertTyp="alert-success";
+                led1.setLedColor(steelseries.LedColor.GREEN_LED);
+                led1.setLedOnOff(false);
+            }
+	};
+        
+        
+    }
+    $scope.pirdata=null;
+    $scope.limit=10;
     $scope.dt = new Date();
+    $scope.alertTyp="alert-success";
     var dt = $scope.dt;
+    init();
     getPirLogs('jmeno pirka',$scope.limit,dt);
     
-    $interval(function(){$scope.dt=new Date();},500);
+    $interval(function(){
+        $scope.dt=new Date();
+    },500);
 });
+//------------------------------------------------------------------------------
+
+
+
 
 rahApp.controller('camController',function($scope,$http){
 
