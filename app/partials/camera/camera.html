@@ -1,5 +1,20 @@
 <div class="row">
         <div class="col-md-6">
+	    <!--<div class="form-inline">-->
+		<div class="row">
+		    <div class="col-md-8">
+			<select class="form-control btn-block" ng-model="camName" ng-change="numfilesChanged()">
+			    <option ng-repeat="c in cams" value="{{c.name}}">{{c.description}}</option>
+			</select>
+		    </div>
+		    <div class="col-md-4">
+			<button class="btn btn-primary btn-block" ng-click="takePictureNow()" type="button">Take pic NOW !</button>
+		    </div>
+		</div>
+	    <!--</div>-->
+        </div>
+
+        <div class="col-md-3">
             <p class="input-group">
               <input type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened" datepicker-options="dateOptions" ng-model="dt" ng-change="numfilesChanged()" ng-required="true" close-text="Close" />
               <span class="input-group-btn">
@@ -8,7 +23,7 @@
             </p>
         </div>
 	
-	<div class="col-md-6">
+	<div class="col-md-3">
 	    <div class="input-group">
 		<span class="input-group-btn">
 		    <button class="btn btn-success" ng-click="numFilesSet(-1)" type="button">-</button>

@@ -73,19 +73,32 @@ rahApp.controller('camController',function($scope,$http){
     $scope.cams = [
 	{
 	    name:'rumation2',
-	    description:'popis ke kamere',
+	    description:'obývací pokoj',
 	    active:true,
 	    disabled:false
 	},
 	{
-	    name:'rumation',
-	    description:'popis ke kamere 2',
+	    name:'rpipokojik',
+	    description:'dětský pokoj',
 	    active:false,
 	    disabled:false
 	},
     ];
     
     $scope.camName = 'rumation2';
+    
+    $scope.takePictureNow = function(){
+	$scope.numfiles = 1;
+	$scope.dt = new Date();
+	console.log('takePictureNow');
+	$http.get('/rest/takepicturenow?cam='+$scope.camName).success(function(data){
+	    $http.get('/rest/getcamnames?cam='+$scope.camName+'&numfiles='+$scope.numfiles+'&date='+$scope.dt.getTime()).success(function(data){
+		$scope.restdata = data;
+		$scope.timelapseDir = '../../img/runnas_public'+data.camfolder+'/';
+		$scope.files = data.files;
+	    });
+	});
+    }
     
     function getCamFiles(camname,numfiles,date){
 	if(numfiles>0){
@@ -101,7 +114,7 @@ rahApp.controller('camController',function($scope,$http){
 	}
     }
     
-    $scope.numfiles=0;
+    $scope.numfiles=1;
     $scope.dt = new Date();
     $scope.format = 'dd.MM.yyyy';
     
