@@ -89,7 +89,8 @@ rahApp.controller('camController',function($scope,$http){
     
     $scope.takePictureNow = function(){
 	$scope.numfiles = 1;
-	$scope.dt = new Date();
+	var now = new Date();
+	$scope.dt = new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59,999);
 	console.log('takePictureNow');
 	$http.get('/rest/takepicturenow?cam='+$scope.camName).success(function(data){
 	    $http.get('/rest/getcamnames?cam='+$scope.camName+'&numfiles='+$scope.numfiles+'&date='+$scope.dt.getTime()).success(function(data){
