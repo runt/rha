@@ -9,9 +9,13 @@ rahApp.config(['$routeProvider',
 		    templateUrl:'partials/camera/camera.html',
 		    controller:'camController'
 		}).
+		when('/dashboard',{
+		    templateUrl:'partials/dashboard/dash.html',
+		    controller:'dashController'
+		}).
 		when('/pirs',{
 		    templateUrl:'partials/pir/pir.html',
 		    controller:'pirController'
 		}).
-		otherwise({redirectTo:'/cameras'});
+		otherwise({redirectTo:'/dashboard'});
     }]);

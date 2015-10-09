@@ -17,12 +17,12 @@ rahApp.controller('pirController',function($scope,$http,$interval){
     }
 
     function init(){
-        led1 = new steelseries.Led('canvasLed1', {
-                            width: 50,
-                            height: 50
-                            });
-        led1.setLedColor(steelseries.LedColor.GREEN_LED);
-        led1.setLedOnOff(false);
+//        led1 = new steelseries.Led('canvasLed1', {
+//                            width: 50,
+//                            height: 50
+//                            });
+//        led1.setLedColor(steelseries.LedColor.GREEN_LED);
+//        led1.setLedOnOff(false);
         
         sock = new WebSocket('ws://'+window.location.host+'/ws/pir');
         sock.onopen = function(){ 
@@ -38,14 +38,14 @@ rahApp.controller('pirController',function($scope,$http,$interval){
             $scope.pirdata=evt.data;
             if(evt.data=="1"){
                 $scope.alertTyp="alert-danger";
-                led1.setLedColor(steelseries.LedColor.RED_LED);
-                led1.setLedOnOff(true);
+//                led1.setLedColor(steelseries.LedColor.RED_LED);
+//                led1.setLedOnOff(true);
                 getPirLogs('jmeno pirka',$scope.limit,$scope.dt);
             }
             else{
                 $scope.alertTyp="alert-success";
-                led1.setLedColor(steelseries.LedColor.GREEN_LED);
-                led1.setLedOnOff(false);
+//                led1.setLedColor(steelseries.LedColor.GREEN_LED);
+//                led1.setLedOnOff(false);
             }
 	};
         
@@ -101,6 +101,7 @@ rahApp.controller('camController',function($scope,$http){
 	});
     }
     
+    
     function getCamFiles(camname,numfiles,date){
 	if(numfiles>0){
 	    $http.get('/rest/getcamnames?cam='+camname+'&numfiles='+numfiles+'&date='+date.getTime()).success(function(data){
@@ -131,8 +132,6 @@ rahApp.controller('camController',function($scope,$http){
 	$scope.opened = true;
     }
     
-    getCamFiles($scope.camName,$scope.numfiles,$scope.dt);
-    
     $scope.numFilesSet = function(val){
 	$scope.numfiles+=val;
 	if($scope.numfiles<0) $scope.numfiles=0;
@@ -142,4 +141,62 @@ rahApp.controller('camController',function($scope,$http){
     $scope.numfilesChanged = function(){
 	getCamFiles($scope.camName,$scope.numfiles,$scope.dt);
     }
+    
+    //controller init
+    getCamFiles($scope.camName,$scope.numfiles,$scope.dt);
+    
+});
+
+//------------------------------------------------------------------------------
+
+rahApp.controller('dashController',function($scope,$http){
+
+    $scope.temps = [];
+    $scope.switches = [
+	{
+	    description:'svetlo-obyvak-knihovna',
+	    state:'off'
+	},
+	{
+	    description:'svetlo-kuchyn-linka',
+	    state:'off'
+	},
+    ];
+
+/**
+ * 
+ * @param {type} s
+ * @returns {undefined}
+ */
+    $scope.onOffBtnCLick = function(s){
+	if(s.state=='on'){
+	    s.state='off';
+	}
+	else{
+	    s.state='on';
+	}
+    }
+    
+    function getMqttLogs(t,limit){
+	if(limit>0){
+	    $http.get('/rest/getmqttlogs?limit='+limit+'&t='+t).then(function(response){
+		if(response.data.length>0){
+		    $scope.temps = [];
+		    var tempObj = {
+			description: response.data[0].topic,
+			value:response.data[0].value,
+			stamp:response.data[0].stamp
+		    }
+		    $scope.temps.push(tempObj);
+		}
+	    });
+	}
+	else{
+	    $scope.temps = [];
+	}
+    }
+    
+    //controller init
+    getMqttLogs('duino%T',1);
+    
 });
