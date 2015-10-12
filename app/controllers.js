@@ -152,44 +152,67 @@ rahApp.controller('camController',function($scope,$http){
 rahApp.controller('dashController',function($scope,$http){
 
     $scope.temps = [];
-    $scope.switches = [
-	{
-	    description:'svetlo-obyvak-knihovna',
-	    state:'off'
-	},
-	{
-	    description:'svetlo-kuchyn-linka',
-	    state:'off'
-	},
-    ];
+    
+    $scope.switches = undefined;
 
 /**
  * 
  * @param {type} s
  * @returns {undefined}
  */
-    $scope.onOffBtnCLick = function(s){
-	if(s.state=='on'){
-	    s.state='off';
-	}
-	else{
-	    s.state='on';
-	}
+    $scope.onOffBtnCLick = function(s,setstate){
+	s.state = setstate;
+	$http.get('/rest/setonoff?switchid='+s.switchid+'&state='+s.state+'&onvalue='+s.onValue+'&offvalue='+s.offValue).then(function(response){
+		    console.log(response.data);
+	    });
     }
     
-    function getMqttLogs(t,limit){
+    function getSwitchesArray(){
+	$http.get('/rest/getswitchesarray').then(function(response){
+		    console.log(response.data);
+		    if(response.data.length!=0){
+			$scope.switches = response.data;
+			getSwitchStates();
+		    }
+	    });
+    }
+    
+    function getSwitchStates(){
+	//TODO zjistit pocatecni stav spinacu,zatim jen pro jeden svetlo_obyvak_knihovna
+	//TODO udelat obecne
+	
+	$http.get('/rest/getonoffstate?switchid='+'svetlo_obyvak_knihovna').then(function(response){
+		    console.log(response.data);
+		    if(response.data.state!==undefined){
+			var stateInt = parseInt(response.data.state);
+			$scope.switches[0].state = stateInt===$scope.switches[0].onValue?'on':'off';
+		    }
+	    });
+	//$scope.switches[0].state = 'on';
+	return;
+    }
+    
+    function getMqttLogs(t,unit,limit){
 	if(limit>0){
 	    $http.get('/rest/getmqttlogs?limit='+limit+'&t='+t).then(function(response){
-		if(response.data.length>0){
-		    $scope.temps = [];
-		    var tempObj = {
-			description: response.data[0].topic,
-			value:response.data[0].value,
-			stamp:response.data[0].stamp
-		    }
-		    $scope.temps.push(tempObj);
-		}
-	    });
+		console.log(response.data);
+		response.data.forEach(function (element, index) {
+		    console.log(element); // logs "3", "5", "7"
+		    console.log(index);   // logs "0", "1", "2"
+		    element.unit = unit;
+		    $scope.temps.push(element);
+		    
+		});
+//		    for(i=0;i<response.data.length;i++){
+//			var t = {
+//			    description: response.data[i].topic,
+//			    value:response.data[i].value,
+//			    stamp:response.data[i].stamp,
+//			    unit:unit
+//			};
+//			console.log(t);
+//			$scope.temps.push(t);
+	});
 	}
 	else{
 	    $scope.temps = [];
@@ -197,6 +220,8 @@ rahApp.controller('dashController',function($scope,$http){
     }
     
     //controller init
-    getMqttLogs('duino%T',1);
-    
+    getMqttLogs('duino%T','°C',1);
+    getMqttLogs('duino%H','%',1);
+    getMqttLogs('duino%A0','lux',1);
+    getSwitchesArray();
 });

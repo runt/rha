@@ -1,43 +1,43 @@
 <div class="row">
-    <div ng-repeat="t in temps" class="col-md-6">
-	<div class="panel panel-primary container-fluid">
+    <div class="col-md-6">
+	<div ng-repeat="t in temps" class="col-md-6">
+	    <div  class="panel panel-primary">
 		<div class="panel-heading">
-		    <h3 class="panel-title">{{t.description}}</h3>
+		    <h3 class="panel-title">{{t.topic}}</h3>
 		</div>
-		
+
 		<div class="panel-body">
 		    <div class="row">
 			<div class="col-xs-12 text-center">
-			    <h1>{{t.value}} °C</h1>
+			    <h1>{{t.value}} {{t.unit}}</h1>
 			    <div>{{t.stamp|date:'MMM d, HH:mm'}}</div>
 			</div>
 		    </div>
 		</div>
 	    </div>
+	</div>
     </div>
-</div>
 
-<div class="row">
-    <div ng-repeat="t in temps" class="col-md-6">
-	<div class="panel panel-primary container-fluid">
-		<div class="panel-heading">
-		    <h3 class="panel-title">ON / OFF</h3>
-		</div>
-		<div class="panel-body">
-		    <div class="row">
-			<div ng-repeat="s in switches" class="col-xs-12 text-center">
-			    <div>{{s.description}}</div>
-			    <div  class="btn-group btn-group-lg btn-group-justified" role="group">
-				<div class="btn-group" role="group">
-				    <button ng-click="onOffBtnCLick(s)" ng-class="{'btn-success':s.state=='on'}" class="btn btn-default" >Zap</button>
-				</div>
-				<div class="btn-group" role="group">
-				    <button ng-click="onOffBtnCLick(s)" ng-class="{'btn-danger':s.state=='off'}" class="btn btn-default" >Vyp</button>
-				</div>
+    <div class="col-md-6">
+	<div class="panel panel-primary">
+	    <div class="panel-heading">
+		<h3 class="panel-title">ON / OFF</h3>
+	    </div>
+	    <div class="panel-body">
+		<div class="row">
+		    <div ng-repeat="s in switches" class="col-md-6 text-center">
+			<div>{{s.description}}</div>
+			<div  class="btn-group btn-group-lg btn-group-justified" role="group">
+			    <div class="btn-group" role="group">
+				<button ng-disabled="s.state == 'on'" ng-click="onOffBtnCLick(s,'on')" ng-class="{'btn-success':s.state == 'on'}" class="btn btn-default" >Zap</button>
+			    </div>
+			    <div class="btn-group" role="group">
+				<button ng-disabled="s.state == 'off'" ng-click="onOffBtnCLick(s,'off')" ng-class="{'btn-danger':s.state == 'off'}" class="btn btn-default" >Vyp</button>
 			    </div>
 			</div>
 		    </div>
 		</div>
 	    </div>
+	</div>
     </div>
 </div>
