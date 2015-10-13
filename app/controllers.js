@@ -149,7 +149,7 @@ rahApp.controller('camController',function($scope,$http){
 
 //------------------------------------------------------------------------------
 
-rahApp.controller('dashController',function($scope,$http){
+rahApp.controller('dashController',function($scope,$http,$interval){
 
     $scope.temps = [];
     
@@ -203,15 +203,6 @@ rahApp.controller('dashController',function($scope,$http){
 		    $scope.temps.push(element);
 		    
 		});
-//		    for(i=0;i<response.data.length;i++){
-//			var t = {
-//			    description: response.data[i].topic,
-//			    value:response.data[i].value,
-//			    stamp:response.data[i].stamp,
-//			    unit:unit
-//			};
-//			console.log(t);
-//			$scope.temps.push(t);
 	});
 	}
 	else{
@@ -221,7 +212,12 @@ rahApp.controller('dashController',function($scope,$http){
     
     //controller init
     getMqttLogs('duino%T','°C',1);
-    getMqttLogs('duino%H','%',1);
-    getMqttLogs('duino%A0','lux',1);
+    //getMqttLogs('duino%H','%',1);
+    //getMqttLogs('duino%A0','lux',1);
     getSwitchesArray();
+    // zatim bez socketu po 2 sekundach obnovit stav switchu
+    $interval(function(){
+        getSwitchStates();
+	//getMqttLogs('duino%A0','lux',1);
+    },2000);
 });
