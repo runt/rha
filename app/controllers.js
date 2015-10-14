@@ -116,6 +116,7 @@ rahApp.controller('camController',function($scope,$http){
 	}
     }
     
+       
     $scope.numfiles=1;
     $scope.dt = new Date();
     $scope.format = 'dd.MM.yyyy';
